@@ -13,7 +13,6 @@ class SearchableBehavior extends ModelBehavior {
 		$settings += array(
 			'order' => 0,
 			'fields' => array(),
-			'translatable' => $model->Behaviors->enabled('Translatable'),
 		);
 
 		$this->settings[$model->name] = $settings;
@@ -26,9 +25,11 @@ class SearchableBehavior extends ModelBehavior {
 		$info['model'] = $model->name;
 		$info['locale'] = null;
 		$info['id'] = $model->id;
+		$info['publishable'] = $model->publishable;
 
 		if (preg_match('/(.*)Translation/', $model->name, $match)) {
 			$info['model'] = $match[1];
+			$info['publishable'] = $model->{$info['model']}->publishable;
 
 			$foreign_key = $model->belongsTo[$info['model']]['foreignKey'];
 			if (isset($model->data[$model->name][$foreign_key])) {
@@ -54,8 +55,8 @@ class SearchableBehavior extends ModelBehavior {
 	public function afterSave($model, $created) {
 		$settings = $this->settings[$model->name];
 
-		$fields = $this->_indexFields($model);
 		$info = $this->_info($model);
+		$fields = $this->_indexFields($model, $info);
 
 		if ($fields === false || $info === false) {
 			return true;
@@ -74,13 +75,13 @@ class SearchableBehavior extends ModelBehavior {
 		return true;
 	}
 	
-	protected function _indexFields($model) {
+	protected function _indexFields($model, $info) {
 		$data = $model->data[$model->name];
 		$settings = $this->settings[$model->name];
 
 		$fields = array();
 
-		if ($model->publishable && isset($data['online']) && !$data['online']) {
+		if ($info['publishable'] && isset($data['online']) && !$data['online']) {
 			$this->afterDelete($model);
 			return false;
 		}
@@ -103,6 +104,8 @@ class SearchableBehavior extends ModelBehavior {
 
 	public function afterDelete($model) {
 		$info = $this->_info($model);
+		unset($info['publishable']);
+		
 		if ($info) {
 			$this->SearchDocument->destroy($info);
 		}
