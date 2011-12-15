@@ -2,6 +2,11 @@
 
 class SearchableBehavior extends ModelBehavior {
 
+	/**
+	 * SearchDocument instance
+	 *
+	 * @var Model
+	 */
 	protected $SearchDocument;
 
 	public function setup($model, $settings = array()) {
@@ -16,15 +21,51 @@ class SearchableBehavior extends ModelBehavior {
 		$this->SearchDocument = $this->SearchDocument ?: ClassRegistry::init('Search.SearchDocument');
 	}
 
-	function afterSave($model, $created) {
-		$fields = $this->_indexFields($model);
+	protected function _info($model) {
+		$info = array();
+		$info['model'] = $model->name;
+		$info['locale'] = null;
+		$info['id'] = $model->id;
+
+		if (preg_match('/(.*)Translation/', $model->name, $match)) {
+			$info['model'] = $match[1];
+
+			$foreign_key = $model->belongsTo[$info['model']]['foreignKey'];
+			if (isset($model->data[$model->name][$foreign_key])) {
+				$info['id'] = $model->data[$model->name][$foreign_key];
+			} else {
+				return false;
+			}
+
+			if (isset($model->data[$model->name]['locale'])) {
+				$info['locale'] = $model->data[$model->name]['locale'];
+			} else {
+				return false;
+			}
+		}
+
+		if ($model->plugin) {
+			$info['model'] = $model->plugin . '.' . $info['model'];
+		}
+
+		return $info;
+	}
+
+	public function afterSave($model, $created) {
 		$settings = $this->settings[$model->name];
+
+		$fields = $this->_indexFields($model);
+		$info = $this->_info($model);
+
+		if ($fields === false || $info === false) {
+			return true;
+		}
 
 		$document = array(
 			'fields' => $fields,
-			'model' => $model->name,
-			'id' => $model->id,
-			'locale' => 'nl',
+			'model' => $info['model'],
+			'id' => $info['id'],
+			'locale' => $info['locale'],
 			'order' => $settings['order'],
 		);
 
@@ -37,11 +78,12 @@ class SearchableBehavior extends ModelBehavior {
 		$data = $model->data[$model->name];
 		$settings = $this->settings[$model->name];
 
+		$fields = array();
+
 		if ($model->publishable && isset($data['online']) && !$data['online']) {
+			$this->afterDelete($model);
 			return false;
 		}
-
-		$fields = array();
 
 		foreach ($settings['fields'] as $field => $score) {
 		    if (isset($data[$field])) {
@@ -59,8 +101,11 @@ class SearchableBehavior extends ModelBehavior {
 		return $fields;
 	}
 
-	function afterDelete($model) {
-		$this->SearchDocument->destroy(array('model' => $model->name, 'id' => $model->id, 'locale' => 'nl'));
+	public function afterDelete($model) {
+		$info = $this->_info($model);
+		if ($info) {
+			$this->SearchDocument->destroy($info);
+		}
 	}
 }
 ?>

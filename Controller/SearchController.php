@@ -20,6 +20,7 @@ class SearchController extends AppController {
 		$query = isset($this->request->query['q']) ? $this->request->query['q'] : null;
 
 		if ($query) {
+			// Save searched query
 			$this->SearchQuery->save(array('query' => $query, 'locale' => 'nl'));
 		}
 
