@@ -67,7 +67,7 @@ class SearchDocument extends AppModel {
 		$query = Sanitize::escape($conditions['query']);
 
 		$conditions = array(
-			'locale' => Language::locale(),
+			'locale' => array(Language::locale(), ''),
 		);
 
 		if ($length < 4) {
