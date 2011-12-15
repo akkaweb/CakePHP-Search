@@ -105,7 +105,7 @@ class SearchableBehavior extends ModelBehavior {
 	public function afterDelete($model) {
 		$info = $this->_info($model);
 		unset($info['publishable']);
-		
+
 		if ($info) {
 			$this->SearchDocument->destroy($info);
 		}

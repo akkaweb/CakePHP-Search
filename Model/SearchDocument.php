@@ -12,6 +12,9 @@ class SearchDocument extends AppModel {
 	 * Custom paginate method, used by the paginator component.
 	 */
 	public function paginate($conditions, $fields, $order, $limit, $page = 1, $recursive = null, $extra = array()) {
+		if (!$conditions['query']) {
+			return array();
+		}
 		$conditions = $this->_searchConditions($conditions);
 
 		$results = $this->find('all', array(
@@ -48,6 +51,9 @@ class SearchDocument extends AppModel {
 	 * Custom paginateCount method, used by the paginator component.
 	 */
 	public function paginateCount($conditions = null, $recursive = 0, $extra = array()) {
+		if (!$conditions['query']) {
+			return 0;
+		}
 		$conditions = $this->_searchConditions($conditions);
 
 		return $this->find('count', array(
