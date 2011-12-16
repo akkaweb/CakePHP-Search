@@ -21,7 +21,7 @@ class SearchController extends AppController {
 
 		if ($query) {
 			// Save searched query
-			$this->SearchQuery->save(array('query' => $query, 'locale' => 'nl'));
+			$this->SearchQuery->save(array('query' => $query, 'locale' => Language::locale()));
 		}
 
 		$this->Paginator->settings = array(
