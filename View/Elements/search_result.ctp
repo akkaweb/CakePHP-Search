@@ -17,4 +17,4 @@
 	<?php endif; ?>
 <?php endforeach; ?>
 
-<?php echo $this->Html->link(__('read more', true), $url, array('class' => 'more')) ?>
+<?php echo $this->Html->link(__d('search', 'read more', true), $url, array('class' => 'more')) ?>

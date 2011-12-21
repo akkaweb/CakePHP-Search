@@ -1,10 +1,10 @@
 <div class="row">
-	<h1><?php echo __('Search'); ?></h1>
+	<h1><?php echo __d('search', 'Search'); ?></h1>
 
 	<?php
 		echo $this->Form->create(null, array('type' => 'get'));
-		echo $this->Form->input('q', array('label' => false, 'placeholder' => __('Search'), 'default' => $query));
-		echo $this->Form->submit(__('Search'));
+		echo $this->Form->input('q', array('label' => false, 'placeholder' => __d('search', 'Search'), 'default' => $query));
+		echo $this->Form->submit(__d('search', 'Search'));
 		echo $this->Form->end();
 	?>
 
@@ -15,7 +15,7 @@
 		</article>
 	<?php endforeach; ?>
 	<?php else: ?>
-		<?php echo __('No search results'); ?>
+		<?php echo __d('search', 'No search results'); ?>
 	<?php endif; ?>
 
 	<?php
