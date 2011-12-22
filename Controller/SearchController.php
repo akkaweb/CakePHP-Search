@@ -3,7 +3,7 @@ App::uses('Sanitize', 'Utility');
 
 class SearchController extends AppController {
 
-	public $uses = array('SearchDocument', 'SearchQuery');
+	public $uses = array('Search.SearchDocument', 'Search.SearchQuery');
 
 	public $components = array('Paginator');
 
