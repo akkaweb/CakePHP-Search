@@ -1,2 +1,9 @@
 <?php
-	Router::connect('/search/*', array('controller' => 'search', 'action' => 'index', 'plugin' => 'search'));
+	Resources::connect(
+		'Search',
+		array(
+			'nl' => '/zoeken/*',
+			'en' => '/search/*',
+		),
+		array('controller' => 'search', 'action' => 'index', 'plugin' => 'search')
+	);

@@ -1,5 +1,6 @@
 <?php
 App::uses('Sanitize', 'Utility');
+App::uses('Vertex', 'Menu.Lib');
 
 class SearchController extends AppController {
 
@@ -33,6 +34,26 @@ class SearchController extends AppController {
 		$results = $this->Paginator->paginate($this->SearchDocument);
 
         $this->set(compact('query', 'results'));
+
+		$this->Menus->findCurrentVertex(Resources::url('Search'));
+
+		$main = $this->Menus->get('main');
+		if (!$main->current) {
+			$vertex = new Vertex(-1, 'search', array(
+				'name' => __('Search'),
+				'url' => Resources::url('Search'),
+			));
+			$main->setVertex($vertex);
+			$main->currentVertex($vertex);
+		}
+		if ($query) {
+			$vertex = new Vertex($main->current->id, 'search-query', array(
+				'name' => $query,
+				'url' => false,
+			));
+			$main->addVertex($vertex);
+			$main->currentVertex($vertex);
+		}
 	}
 }
 ?>
