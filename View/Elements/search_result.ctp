@@ -2,7 +2,7 @@
 <?php
 	$Model = $this->Search->model($result);
 	$data = $result[$Model->name];
-	$url = Resources::url($Model->name . '::view', $result);
+	$url = Resources::url($result['model'] . '::view', $result);
     echo $this->Html->link($this->Search->highlight($data[$Model->displayField]), $url, array('escape' => false));
 ?>
 </h2>
