@@ -30,9 +30,15 @@ class SearchDocument extends AppModel {
 		foreach ($results as $i => $result) {
 			list($model, $primaryKey) = explode('-', $result['SearchDocument']['key'], 2);
 			$Model = ClassRegistry::init($model);
+			// Set recursive value
+			if(isset($Model->actsAs['Search.Searchable']['recursive'])) {
+				$recursive = $Model->actsAs['Search.Searchable']['recursive'];
+			} else {
+				$recursive = -1;
+			}
 			$data = $Model->find('first', array(
-				'conditions' => array($Model->primaryKey => $primaryKey),
-				'recursive' => -1,
+				'conditions' => array($Model->name . '.' . $Model->primaryKey => $primaryKey),
+				'recursive' => $recursive,
 			));
 			if ($data) {
 				$results[$i] += $data;
