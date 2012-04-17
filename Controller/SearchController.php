@@ -26,7 +26,7 @@ class SearchController extends AppController {
 		}
 
 		$this->Paginator->settings = array(
-			'limit' => 10,
+			'limit' => Configure::read('Search.limit') ?: 10,
 			'conditions' => compact('query'),
 			'paramType' => 'querystring',
 		);
