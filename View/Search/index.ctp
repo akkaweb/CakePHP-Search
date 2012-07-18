@@ -19,5 +19,5 @@
 
 <?php
 	$this->Paginator->options(array('url' => array('?' => $this->request->query)));
-	echo $this->element('pagination', array('model' => 'SearchDocument'), array('plugin' => 'TwitterBootstrap'));
+	echo $this->Paginator->pagination();
 ?>

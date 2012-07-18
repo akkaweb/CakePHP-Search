@@ -6,10 +6,10 @@ class SearchController extends AppController {
 
 	public $uses = array('Search.SearchDocument', 'Search.SearchQuery');
 
-	public $components = array('Paginator');
+	public $components = array('Paginator', 'RequestHandler');
 
 	public $helpers = array(
-		'Paginator',
+		'Paginator' => array('className' => 'TwitterBootstrap.BootstrapPaginator'),
 		'Form' => array('className' => 'TwitterBootstrap.BootstrapForm'),
 		'Html',
 		'Search.Search'
