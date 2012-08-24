@@ -29,7 +29,6 @@ class SearchableBehavior extends ModelBehavior {
 
 		if (preg_match('/(.*)Translation/', $model->name, $match)) {
 			$info['model'] = $match[1];
-			$info['publishable'] = $model->{$info['model']}->publishable;
 
 			$foreign_key = $model->belongsTo[$info['model']]['foreignKey'];
 			if (isset($model->data[$model->name][$foreign_key])) {
@@ -81,9 +80,12 @@ class SearchableBehavior extends ModelBehavior {
 
 		$fields = array();
 
-		if ($info['publishable'] && isset($data['online']) && !$data['online']) {
-			$this->afterDelete($model);
-			return false;
+		if ($info['publishable']) {
+			$publishField = is_bool($info['publishable']) ? 'online' : $info['publishable'];
+			if (isset($data[$publishField]) && !$data[$publishField]) {
+				$this->afterDelete($model);
+				return false;
+			}
 		}
 
 		foreach ($settings['fields'] as $field => $score) {
