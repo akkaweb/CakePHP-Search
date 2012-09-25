@@ -14,7 +14,7 @@ class ListTask extends Shell {
 			'rows' => array(),
 		);
 		foreach ($models as $model) {
-			$table['rows'][] = array($model->name, $model->publishable);
+			$table['rows'][] = array($model->name, $model->Behaviors->Searchable->settings[$model->name]['publishable']);
 		}
 		
 		$this->_table($table);

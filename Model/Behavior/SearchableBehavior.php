@@ -13,6 +13,7 @@ class SearchableBehavior extends ModelBehavior {
 		$settings += array(
 			'order' => 0,
 			'fields' => array(),
+			'publishable' => $model->schema('online') ? 'online' : false,
 		);
 
 		$this->settings[$model->name] = $settings;
@@ -25,7 +26,7 @@ class SearchableBehavior extends ModelBehavior {
 		$info['model'] = $model->name;
 		$info['locale'] = null;
 		$info['id'] = $model->id;
-		$info['publishable'] = $model->publishable;
+		$info['publishable'] = $this->settings[$model->name]['publishable'];
 
 		if (preg_match('/(.*)Translation/', $model->name, $match)) {
 			$info['model'] = $match[1];
