@@ -79,11 +79,13 @@ class SearchDocument extends AppModel {
 		$maxLength = max(array_map(function($str) {return strlen($str);}, explode(' ', $conditions['query'])));
 		$query = Sanitize::escape($conditions['query']);
 
+		$wordCount = str_word_count($query);
+		
 		$conditions = array(
 			'locale' => array(Language::locale(), ''),
 		);
 
-		if ($length < 4 || $maxLength < 4) {
+		if ($wordCount == 1 || $length < 4 || $maxLength < 4) {
 			// Words with length smaller than 4 are not indexed
 			$conditions[] = "SearchDocument.data LIKE '%$query%'";
 		} else {
