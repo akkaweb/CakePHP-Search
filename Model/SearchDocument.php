@@ -15,13 +15,17 @@ class SearchDocument extends AppModel {
 		if (!$conditions['query']) {
 			return array();
 		}
+
+		if(!$order) {
+			$order = 'SearchDocument.order desc, total_score desc';
+		}
 		$conditions = $this->_searchConditions($conditions);
 
 		$results = $this->find('all', array(
        		'limit' => $limit,
 			'page' => $page,
        		'conditions' => $conditions,
-			'order' => array('SearchDocument.order desc', 'total_score desc'),
+			'order' => $order,
 			'fields' => array('SearchDocument.key', 'SUM(score) as total_score', 'GROUP_CONCAT(field) as fields'),
 			'group' => array('SearchDocument.key'),
 		));
