@@ -9,7 +9,7 @@ class SearchableBehavior extends ModelBehavior {
 	 */
 	protected $SearchDocument;
 
-	public function setup($model, $settings = array()) {
+	public function setup(Model $model, $settings = array()) {
 		$settings += array(
 			'order' => 0,
 			'fields' => array(),
@@ -52,7 +52,7 @@ class SearchableBehavior extends ModelBehavior {
 		return $info;
 	}
 
-	public function afterSave($model, $created) {
+	public function afterSave(Model $model, $created) {
 		$settings = $this->settings[$model->name];
 
 		$info = $this->_info($model);
@@ -105,7 +105,7 @@ class SearchableBehavior extends ModelBehavior {
 		return $fields;
 	}
 
-	public function afterDelete($model) {
+	public function afterDelete(Model $model) {
 		$info = $this->_info($model);
 		unset($info['publishable']);
 
@@ -114,4 +114,3 @@ class SearchableBehavior extends ModelBehavior {
 		}
 	}
 }
-?>
