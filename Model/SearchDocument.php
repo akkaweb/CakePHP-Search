@@ -123,7 +123,7 @@ class SearchDocument extends AppModel {
 
 		if ($data) {
 			$columns = array('key', 'model', 'locale', 'field', 'data', 'score', 'order');
-			$this->_upsert($this->table, $columns, $data, 'data=VALUES(data), score=VALUES(score)');
+			$this->_upsert($this->table, $columns, $data, 'data=VALUES(data), score=VALUES(score), `order`=VALUES(`order`)');
 		}
 
 		if ($delete) {
