@@ -32,7 +32,8 @@ class SearchHelper extends AppHelper {
 		return $this->highlight($this->Text->excerpt($text, $this->query, $radius));
 	}
 
-	public function model($result) {
+	public function model() {
+		$result = func_get_args(0);
 		return ClassRegistry::init($result['model']);
 	}
 
