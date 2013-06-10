@@ -33,7 +33,7 @@ class SearchHelper extends AppHelper {
 	}
 
 	public function model() {
-		$result = func_get_args(0);
+		$result = func_get_arg(0);
 		return ClassRegistry::init($result['model']);
 	}
 
