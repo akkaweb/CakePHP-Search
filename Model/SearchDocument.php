@@ -46,6 +46,7 @@ class SearchDocument extends AppModel {
 				$results[$i]['fields'] = explode(',', $result[0]['fields']);
 				$results[$i]['model'] = $model;
 			} else {
+				$this->deleteAll(array('key' =>  $result['SearchDocument']['key']), false , false);
 				unset($results[$i]);
 			}
 		}
